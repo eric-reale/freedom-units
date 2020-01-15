@@ -1,6 +1,6 @@
 const panels = document.querySelectorAll('.panel');
-// const unitType = document.querySelectorAll('.unit-type');
 
+// Wait function
 function wait(ms = 0) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -10,13 +10,25 @@ function unitTypeMargin(e) {
   unitDiv.style.marginTop = "0px";
 }
 
+function createInputEventListeners() {
+  const inputs = [
+  ...Array.from(document.querySelectorAll('input')),
+  ...Array.from(document.querySelectorAll('select')),
+  ]
+  return inputs;
+  // inputs.forEach(input => {
+  //   addEventListener('keydown', function() {
+  //   console.log('here');
+  // })
+  // })
+}
+
 async function createInputs(e) {
-  // console.log(e.currentTarget);
   const para1 = (e.currentTarget.firstElementChild);
   const para2 = (e.currentTarget.lastElementChild);
   await wait(500);
   const htmlTop = `
-  <div class='inputs-select' style="width: 40%; margin-top: -30px">
+  <div class='inputs-select slide-down' style="width: 40%; margin-top: -25px">
           <div class="select" style="display: grid;">
             <label for="distance-unit-selection">Select Units</label>
             <select class="u-full-width" id="distance-select">
@@ -33,7 +45,7 @@ async function createInputs(e) {
   </div>
   `;
   const htmlBottom = `
-  <div class='inputs-select' style="width: 40%; margin-bottom: -30px">
+  <div class='inputs-select slide-up' style="width: 40%; margin-bottom: -20px">
           <div class="select" style="display: grid;">
             <label for="distance-unit-selection">Select Units</label>
             <select class="u-full-width" id="distance-select">
@@ -51,11 +63,28 @@ async function createInputs(e) {
       `
   para1.insertAdjacentHTML('afterend', htmlTop);
   para2.insertAdjacentHTML('beforebegin', htmlBottom);
+  createInputEventListeners();
 }
 
 function toggleOpen(e) {
-  // console.log(e.currentTarget);
+  const panelsArr = Array.from(panels);
+  let openPanel = panelsArr.find(panel => panel.classList.contains('open'));
+
   // console.log(e.target);
+  // console.log(openPanel);
+  // console.log(this);
+
+  if (this === openPanel) {
+      if (e.target) {
+        console.log(e.target.html);
+      }
+    openPanel.classList.remove('open');
+    return;
+  }
+  if (openPanel) {
+    openPanel.classList.remove('open');
+  }
+
   this.classList.toggle('open');
   unitTypeMargin(e);
   createInputs(e);
@@ -66,6 +95,7 @@ function toggleActive(e) {
   this.classList.toggle('open-active');
 }
 
+// Panel event listeners
 panels.forEach(panel => {
   panel.addEventListener('click', toggleOpen);
 })
