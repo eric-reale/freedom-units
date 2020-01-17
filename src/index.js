@@ -1,4 +1,4 @@
-import 'babel-polyfill';
+// import 'babel-polyfill';
 
 // import metricDistanceUnits from './units.js';
 // import currencies from './units.js';  //// Not working
