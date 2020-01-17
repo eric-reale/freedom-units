@@ -25,12 +25,32 @@ function unitTypeMargin(e) {
   unitDiv.style.marginTop = "0px";
 }
 
-function createInputEventListeners() {
+function convertUnits(inputs) {
+  // console.log(inputs);
+  const topInput = inputs.find(function(element) {
+    return element.classList.contains("amount_top")
+  })
+
+  const topSelect = inputs.find(function(element) {
+    return element.classList.contains("distance-select")
+  })
+  console.log(topSelect.value);
+}
+
+function createInputsArray() {
   const inputs = [
   ...Array.from(document.querySelectorAll('input')),
   ...Array.from(document.querySelectorAll('select')),
   ]
-  return inputs;
+  convertUnits(inputs);
+
+// neeed to make an on change event listener;
+
+  // const topInput = inputs.find(function(element) {
+  //   return element.classList.contains("amount_top")
+  // })
+  // console.log(topInput);
+  // return inputs;
   // inputs.forEach(input => {
   //   addEventListener('keydown', function() {
   //   console.log('here');
@@ -69,15 +89,9 @@ function generateOptions(options) {
     )
 }
 
-// let optionsHTML = generateOptions
-
-
 async function createInputs(e) {
-  // console.log(e.currentTarget);
-  // console.log(checkPanelNumber(e.currentTarget)[0]);
   let optionsTopHTML = generateOptions(checkPanelNumber(e.currentTarget)[0]);
   let optionsBottomHTML = generateOptions(checkPanelNumber(e.currentTarget)[1]);
-  // console.log(optionsHTML);
   const para1 = (e.currentTarget.firstElementChild);
   const para2 = (e.currentTarget.lastElementChild);
   await wait(500);
@@ -85,48 +99,38 @@ async function createInputs(e) {
   <div class='inputs-select slide-down' style="width: 40%; margin-top: -25px">
           <div class="select" style="display: grid; width: 120px;">
             <label for="distance-unit-selection">Select Units</label>
-            <select class="distance-select" id="distance-select" style="width: 120px;">
+            <select class="distance-select" id="distance-select" style="width: 120px; height: 35px">
             ${optionsTopHTML}
             </select>
           </div>
 
           <div class="distance-input" style="display: grid; margin-left: 10%; width: 120px;">
             <label for="distance-input">Input Units</label>
-            <input class="" type="number" style="width: 120px;" placeholder="" id="">
+            <input name="amount_top" class="amount_top" type="number" style="width: 120px; height: 35px;" placeholder="" id="">
           </div>
   </div>
   `;
 
-  const selectClass = document.querySelector('.distance-select');
-
-//   for(let i = 0; i < optionsHTML.length; i++) {
-//     let opt = optionsHTML[i];
-//     // console.log(opt);
-//     let e = document.createElement("option");
-//     el.textContent = opt;
-//     el.value = opt;
-//     console.log(el);
-//     selectClass.appendChild(el);
-// }
+  // const selectClass = document.querySelector('.distance-select');
 
   const htmlBottom = `
   <div class='inputs-select slide-up' style="width: 40%; margin-bottom: -20px">
           <div class="select" style="display: grid; width: 120px;">
             <label for="distance-unit-selection">Select Units</label>
-            <select class="" id="distance-select" style="width: 120px;">
+            <select class="" id="distance-select" style="width: 120px; height: 35px;">
                 ${optionsBottomHTML}
             </select>
           </div>
 
           <div class="distance-input" style="display: grid; margin-left: 10%; width: 120px;">
             <label for="distance-input">Input Units</label>
-            <input class="" type="number" style="width: 120px;" placeholder="" id="">
+            <input class="" type="number" style="width: 120px; height: 35px;" placeholder="" id="">
           </div>
         </div>
       `
   para1.insertAdjacentHTML('afterend', htmlTop);
   para2.insertAdjacentHTML('beforebegin', htmlBottom);
-  createInputEventListeners();
+  createInputsArray();
 }
 
 function removeInputs() {
