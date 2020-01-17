@@ -70,10 +70,12 @@ function toggleOpen(e) {
   const panelsArr = Array.from(panels);
   let openPanel = panelsArr.find(panel => panel.classList.contains('open'));
 
-  // console.log(e.target);
-  // console.log(openPanel);
-  // console.log(this);
-
+  if (e.target.type === 'number') {
+    return;
+  }
+  if (e.target.type === 'select-one') {
+    return;
+  }
   if (this === openPanel) {
     openPanel.classList.remove('open');
     return;
