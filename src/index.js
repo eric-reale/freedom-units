@@ -1,4 +1,4 @@
-// import 'babel-polyfill';
+import 'babel-polyfill';
 
 // import metricDistanceUnits from './units.js';
 // import currencies from './units.js';  //// Not working
@@ -72,8 +72,16 @@ async function createInputs(e) {
 }
 
 function removeInputs() {
-  const inputSelects = document.querySelectorAll('.inputs-select');
-  inputSelects.forEach(input => input.parentNode.removeChild(input));
+  const inputSelects = Array.from(document.querySelectorAll('.inputs-select'));
+    function removeFadeOut( el, speed ) {
+    var seconds = speed/1000;
+    el.style.transition = "opacity "+seconds+"s ease";
+    el.style.opacity = 0;
+    setTimeout(function() {
+        el.parentNode.removeChild(el);
+    }, speed);
+  }
+    inputSelects.forEach(input => removeFadeOut(input, 600));
 }
 
 function toggleOpen(e) {
