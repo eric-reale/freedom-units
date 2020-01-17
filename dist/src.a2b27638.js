@@ -8134,6 +8134,9 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 // import metricDistanceUnits from './units.js';
 // import currencies from './units.js';  //// Not working
+var metricDistanceUnits = ['Millimeter', 'Centimeter', 'Meter', 'Kilometer'];
+var imperialDistanceUnits = ['Inch', 'Foot', 'Yard', 'Mile'];
+var placeholderArray = ['Unit', 'Unit', 'Unit', 'Unit'];
 var panels = document.querySelectorAll('.panel'); // Wait function
 
 function wait() {
@@ -8157,6 +8160,47 @@ function createInputEventListeners() {
   // })
 }
 
+function checkPanelNumber(panel) {
+  var panelArr = Array.from(panel.childNodes);
+  var thisPanel = panelArr.find(function (element) {
+    if (element.nodeName === '#text') return;
+    return element.classList.contains("unit-type");
+  });
+
+  switch (thisPanel.innerText) {
+    case 'DISTANCE':
+      return [metricDistanceUnits, imperialDistanceUnits];
+      break;
+
+    case 'LIQUID':
+      return [placeholderArray, placeholderArray];
+      break;
+
+    case 'TEMPERATURE':
+      return [placeholderArray, placeholderArray];
+      break;
+
+    case 'WEIGHT':
+      return [placeholderArray, placeholderArray];
+      break;
+
+    case 'CURRENECY':
+      return [placeholderArray, placeholderArray];
+      break;
+
+    default:
+      null;
+  }
+}
+
+function generateOptions(options) {
+  if (!options) return;
+  return options.map(function (unit) {
+    return "<option value=\"".concat(unit, "\">").concat(unit, "</option>");
+  });
+} // let optionsHTML = generateOptions
+
+
 function createInputs(_x) {
   return _createInputs.apply(this, arguments);
 }
@@ -8165,24 +8209,39 @@ function _createInputs() {
   _createInputs = _asyncToGenerator(
   /*#__PURE__*/
   regeneratorRuntime.mark(function _callee(e) {
-    var para1, para2, htmlTop, htmlBottom;
+    var optionsTopHTML, optionsBottomHTML, para1, para2, htmlTop, selectClass, htmlBottom;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
+            // console.log(e.currentTarget);
+            // console.log(checkPanelNumber(e.currentTarget)[0]);
+            optionsTopHTML = generateOptions(checkPanelNumber(e.currentTarget)[0]);
+            optionsBottomHTML = generateOptions(checkPanelNumber(e.currentTarget)[1]); // console.log(optionsHTML);
+
             para1 = e.currentTarget.firstElementChild;
             para2 = e.currentTarget.lastElementChild;
-            _context.next = 4;
+            _context.next = 6;
             return wait(500);
 
-          case 4:
-            htmlTop = "\n  <div class='inputs-select slide-down' style=\"width: 40%; margin-top: -25px\">\n          <div class=\"select\" style=\"display: grid; width: 120px;\">\n            <label for=\"distance-unit-selection\">Select Units</label>\n            <select class=\"\" id=\"distance-select\" style=\"width: 120px;\">\n                <option value=\"Option 1\">Questions</option>\n                <option value=\"Option 2\">Admiration</option>\n                <option value=\"Option 3\">Can I get your number?</option>\n            </select>\n          </div>\n\n          <div class=\"distance-input\" style=\"display: grid; margin-left: 10%; width: 120px;\">\n            <label for=\"distance-input\">Input Units</label>\n            <input class=\"\" type=\"number\" style=\"width: 120px;\" placeholder=\"\" id=\"\">\n          </div>\n  </div>\n  ";
-            htmlBottom = "\n  <div class='inputs-select slide-up' style=\"width: 40%; margin-bottom: -20px\">\n          <div class=\"select\" style=\"display: grid; width: 120px;\">\n            <label for=\"distance-unit-selection\">Select Units</label>\n            <select class=\"\" id=\"distance-select\" style=\"width: 120px;\">\n                <option value=\"Option 1\">Questions</option>\n                <option value=\"Option 2\">Admiration</option>\n                <option value=\"Option 3\">Can I get your number?</option>\n            </select>\n          </div>\n\n          <div class=\"distance-input\" style=\"display: grid; margin-left: 10%; width: 120px;\">\n            <label for=\"distance-input\">Input Units</label>\n            <input class=\"\" type=\"number\" style=\"width: 120px;\" placeholder=\"\" id=\"\">\n          </div>\n        </div>\n      ";
+          case 6:
+            htmlTop = "\n  <div class='inputs-select slide-down' style=\"width: 40%; margin-top: -25px\">\n          <div class=\"select\" style=\"display: grid; width: 120px;\">\n            <label for=\"distance-unit-selection\">Select Units</label>\n            <select class=\"distance-select\" id=\"distance-select\" style=\"width: 120px;\">\n            ".concat(optionsTopHTML, "\n            </select>\n          </div>\n\n          <div class=\"distance-input\" style=\"display: grid; margin-left: 10%; width: 120px;\">\n            <label for=\"distance-input\">Input Units</label>\n            <input class=\"\" type=\"number\" style=\"width: 120px;\" placeholder=\"\" id=\"\">\n          </div>\n  </div>\n  ");
+            selectClass = document.querySelector('.distance-select'); //   for(let i = 0; i < optionsHTML.length; i++) {
+            //     let opt = optionsHTML[i];
+            //     // console.log(opt);
+            //     let e = document.createElement("option");
+            //     el.textContent = opt;
+            //     el.value = opt;
+            //     console.log(el);
+            //     selectClass.appendChild(el);
+            // }
+
+            htmlBottom = "\n  <div class='inputs-select slide-up' style=\"width: 40%; margin-bottom: -20px\">\n          <div class=\"select\" style=\"display: grid; width: 120px;\">\n            <label for=\"distance-unit-selection\">Select Units</label>\n            <select class=\"\" id=\"distance-select\" style=\"width: 120px;\">\n                ".concat(optionsBottomHTML, "\n            </select>\n          </div>\n\n          <div class=\"distance-input\" style=\"display: grid; margin-left: 10%; width: 120px;\">\n            <label for=\"distance-input\">Input Units</label>\n            <input class=\"\" type=\"number\" style=\"width: 120px;\" placeholder=\"\" id=\"\">\n          </div>\n        </div>\n      ");
             para1.insertAdjacentHTML('afterend', htmlTop);
             para2.insertAdjacentHTML('beforebegin', htmlBottom);
             createInputEventListeners();
 
-          case 9:
+          case 12:
           case "end":
             return _context.stop();
         }
