@@ -1,3 +1,8 @@
+import 'babel-polyfill';
+
+// import metricDistanceUnits from './units.js';
+// import currencies from './units.js';  //// Not working
+
 const panels = document.querySelectorAll('.panel');
 
 // Wait function
@@ -66,6 +71,11 @@ async function createInputs(e) {
   createInputEventListeners();
 }
 
+function removeInputs() {
+  const inputSelects = document.querySelectorAll('.inputs-select');
+  inputSelects.forEach(input => input.parentNode.removeChild(input));
+}
+
 function toggleOpen(e) {
   const panelsArr = Array.from(panels);
   let openPanel = panelsArr.find(panel => panel.classList.contains('open'));
@@ -78,10 +88,12 @@ function toggleOpen(e) {
   }
   if (this === openPanel) {
     openPanel.classList.remove('open');
+    removeInputs();
     return;
   }
   if (openPanel) {
     openPanel.classList.remove('open');
+    removeInputs();
   }
 
   this.classList.toggle('open');

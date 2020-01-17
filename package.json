@@ -2,5 +2,17 @@
   "name": "dad-jokes",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.4"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.8.3",
+    "babel-polyfill": "^6.26.0",
+    "units.js": "^0.1.1"
+  }
 }

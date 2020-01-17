@@ -1,0 +1,9 @@
+[main]
+host = https://www.transifex.com
+
+[unitsjs.enyml]
+file_filter = locales/<lang>.yml
+source_file = locales/en.yml
+source_lang = en
+type = YAML
+
