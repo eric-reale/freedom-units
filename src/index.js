@@ -29,35 +29,35 @@ async function createInputs(e) {
   await wait(500);
   const htmlTop = `
   <div class='inputs-select slide-down' style="width: 40%; margin-top: -25px">
-          <div class="select" style="display: grid;">
+          <div class="select" style="display: grid; width: 120px;">
             <label for="distance-unit-selection">Select Units</label>
-            <select class="u-full-width" id="distance-select">
+            <select class="" id="distance-select" style="width: 120px;">
                 <option value="Option 1">Questions</option>
                 <option value="Option 2">Admiration</option>
                 <option value="Option 3">Can I get your number?</option>
             </select>
           </div>
 
-          <div class="distance-input" style="display: grid; margin-left: 10%">
+          <div class="distance-input" style="display: grid; margin-left: 10%; width: 120px;">
             <label for="distance-input">Input Units</label>
-            <input class="u-full-width" type="number" placeholder="" id="">
+            <input class="" type="number" style="width: 120px;" placeholder="" id="">
           </div>
   </div>
   `;
   const htmlBottom = `
   <div class='inputs-select slide-up' style="width: 40%; margin-bottom: -20px">
-          <div class="select" style="display: grid;">
+          <div class="select" style="display: grid; width: 120px;">
             <label for="distance-unit-selection">Select Units</label>
-            <select class="u-full-width" id="distance-select">
+            <select class="" id="distance-select" style="width: 120px;">
                 <option value="Option 1">Questions</option>
                 <option value="Option 2">Admiration</option>
                 <option value="Option 3">Can I get your number?</option>
             </select>
           </div>
 
-          <div class="distance-input" style="display: grid; margin-left: 10%">
+          <div class="distance-input" style="display: grid; margin-left: 10%; width: 120px;">
             <label for="distance-input">Input Units</label>
-            <input class="u-full-width" type="number" placeholder="" id="">
+            <input class="" type="number" style="width: 120px;" placeholder="" id="">
           </div>
         </div>
       `
