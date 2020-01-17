@@ -1,3 +1,7 @@
+/*https://stackoverflow.com/questions/2989263/disable-auto-zoom-in-input-text-tag-safari-on-iphone
+https://www.warrenchandler.com/2019/04/02/stop-iphones-from-zooming-in-on-form-fields/*/
+
+
 html {
   box-sizing: border-box;
   background: #ffc600;
@@ -40,6 +44,7 @@ input[type="radio"] {
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   height: auto;
+  font-size: 16px;
 }
 
 input[type="search"] {
@@ -88,6 +93,7 @@ select {
   height: 20px;
   padding: 6px 10px; /* The 6px vertically centers text on FF, ignored by Webkit */
   background-color: #fff;
+  font-size: 16px;
   border: 1px solid #D1D1D1;
   border-radius: 4px;
   box-shadow: none;
@@ -108,7 +114,8 @@ textarea {
 textarea {
   min-height: 65px;
   padding-top: 6px;
-  padding-bottom: 6px; }
+  padding-bottom: 6px;
+  font-size: 16px; }
 input[type="email"]:focus,
 input[type="number"]:focus,
 input[type="search"]:focus,
@@ -119,6 +126,7 @@ input[type="password"]:focus,
 textarea:focus,
 select:focus {
   border: 1px solid #33C3F0;
+  font-size: 16px;
   outline: 0; }
 input[type="checkbox"],
 input[type="radio"] {

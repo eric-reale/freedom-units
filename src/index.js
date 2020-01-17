@@ -70,9 +70,9 @@ function toggleOpen(e) {
   const panelsArr = Array.from(panels);
   let openPanel = panelsArr.find(panel => panel.classList.contains('open'));
 
-  console.log(e.target);
-  console.log(openPanel);
-  console.log(this);
+  // console.log(e.target);
+  // console.log(openPanel);
+  // console.log(this);
 
   if (this === openPanel) {
     openPanel.classList.remove('open');
@@ -94,7 +94,7 @@ function toggleActive(e) {
 
 // Panel event listeners
 panels.forEach(panel => {
-  panel.addEventListener('click', toggleOpen);
+  panel.addEventListener('click', toggleOpen)
 })
 
 panels.forEach(panel => {
