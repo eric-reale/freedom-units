@@ -1,4 +1,4 @@
-import 'babel-polyfill';
+// import 'babel-polyfill';
 
 // import metricDistanceUnits from './units.js';
 // import currencies from './units.js';  //// Not working
@@ -25,79 +25,93 @@ function unitTypeMargin(e) {
   unitDiv.style.marginTop = "0px";
 }
 
-function convertUnits(inputs) {
-  // console.log(inputs);
-  const topInput = inputs.find(function(element) {
-    return element.classList.contains("amount_top")
-  })
+let selectTopValue;
+let selectBottomValue;
 
-  const topSelect = inputs.find(function(element) {
-    return element.classList.contains("distance-select")
-  })
-  console.log(topSelect.value);
-}
+function handleSelectValues(e) {
+  if (e.target.classList.contains('select_top')) {
+  let selectedTopIndex = e.target.options.selectedIndex;
+  selectTopValue = (e.target.options[selectedTopIndex].value)
+  }
+
+  if (e.target.classList.contains('select_bottom')) {
+  let selectedBottomIndex = e.target.options.selectedIndex;
+  selectBottomValue = (e.target.options[selectedBottomIndex].value)
+  }
+ }
 
 function createSelectEventListeners(selects) {
-  selects.forEach(select => {
-    addEventListener('change', function(e) {
-      if (e.target.classList.contains('amount_top')) return;
-      if (e.target.classList.contains('amount_bottom')) return;
-      const selectedIndex = e.target.options.selectedIndex;
-      let selectValue = (e.target.options[selectedIndex].value);
-      return selectValue;
-    })
+  let topSelect = selects[0];
+  let bottomSelect = selects[1];
+
+  topSelect.addEventListener('change', function(e) {
+    if (e.target.classList.contains('amount_top')) return;
+    if (e.target.classList.contains('amount_bottom')) return;
+    handleSelectValues(e);
   })
+
+  bottomSelect.addEventListener('change', function(e) {
+    if (e.target.classList.contains('amount_top')) return;
+    if (e.target.classList.contains('amount_bottom')) return;
+    handleSelectValues(e);
+  })
+}
+
+
+function convertUnits(topValue, bottomValue) {
+    console.log(selectTopValue);
+    console.log(selectBottomValue);
+    console.log(topValue);
+    console.log(bottomValue);
 }
 
 function createInputsEventListeners(inputs) {
-  console.log(inputs);
-    let inputValue = [];
-    inputs.forEach(input => {
-      addEventListener('keyup', function(e) {
-        inputValue.push(e.key)
-        console.log(inputValue);
-      })
-    })
+  let topInput = inputs[0];
+  let bottomInput = inputs[1];
+  let inputTopValue = [];
+  let inputBottomValue = [];
+
+  topInput.addEventListener('keyup', function() {
+    inputTopValue = topInput.value;
+    convertUnits(inputTopValue, inputBottomValue)
+  })
+
+  bottomInput.addEventListener('keyup', function() {
+    inputBottomValue = bottomInput.value;
+    convertUnits(inputTopValue, inputBottomValue)
+  })
 }
 
 function findInputs() {
-  const inputs = [
+  let inputs = [
   ...Array.from(document.querySelectorAll('input')),
   ...Array.from(document.querySelectorAll('select')),
   ]
   let specificInputs = []
   let specificSelects = [];
-  const topInput = inputs.find(function(element) {
+  let topInput = inputs.find(function(element) {
     return element.classList.contains("amount_top")
   })
 
-  const topSelect = inputs.find(function(element) {
+  let topSelect = inputs.find(function(element) {
     return element.classList.contains("select_top")
   })
 
-  const bottomInput = inputs.find(function(element) {
+  let bottomInput = inputs.find(function(element) {
     return element.classList.contains("amount_bottom")
   })
 
-  const bottomSelect = inputs.find(function(element) {
+  let bottomSelect = inputs.find(function(element) {
     return element.classList.contains("select_bottom")
   })
-  // convertUnits(inputs);
 
   specificInputs.push(topInput, bottomInput);
   specificSelects.push(topSelect, bottomSelect);
 
-  createInputsEventListeners(specificInputs);
+  // console.log(specificSelects, specificInputs);
+
   createSelectEventListeners(specificSelects);
-
-// neeed to make an on change event listener;
-
-  // return inputs;
-  // inputs.forEach(input => {
-  //   addEventListener('keydown', function() {
-  //   console.log('here');
-  // })
-  // })
+  createInputsEventListeners(specificInputs);
 }
 
 function checkPanelNumber(panel) {
@@ -172,6 +186,7 @@ async function createInputs(e) {
       `
   para1.insertAdjacentHTML('afterend', htmlTop);
   para2.insertAdjacentHTML('beforebegin', htmlBottom);
+  await wait(100); // waiting to give a chance to find inputs after 'open' and 'open-active' transfer to new panel
   findInputs();
 }
 
