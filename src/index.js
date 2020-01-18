@@ -1,4 +1,4 @@
-// import 'babel-polyfill';
+import 'babel-polyfill';
 
 // import metricDistanceUnits from './units.js';
 // import currencies from './units.js';  //// Not working
@@ -37,19 +37,61 @@ function convertUnits(inputs) {
   console.log(topSelect.value);
 }
 
-function createInputsArray() {
+function createSelectEventListeners(selects) {
+  selects.forEach(select => {
+    addEventListener('change', function(e) {
+      if (e.target.classList.contains('amount_top')) return;
+      if (e.target.classList.contains('amount_bottom')) return;
+      const selectedIndex = e.target.options.selectedIndex;
+      let selectValue = (e.target.options[selectedIndex].value);
+      return selectValue;
+    })
+  })
+}
+
+function createInputsEventListeners(inputs) {
+  console.log(inputs);
+    let inputValue = [];
+    inputs.forEach(input => {
+      addEventListener('keyup', function(e) {
+        inputValue.push(e.key)
+        console.log(inputValue);
+      })
+    })
+}
+
+function findInputs() {
   const inputs = [
   ...Array.from(document.querySelectorAll('input')),
   ...Array.from(document.querySelectorAll('select')),
   ]
-  convertUnits(inputs);
+  let specificInputs = []
+  let specificSelects = [];
+  const topInput = inputs.find(function(element) {
+    return element.classList.contains("amount_top")
+  })
+
+  const topSelect = inputs.find(function(element) {
+    return element.classList.contains("select_top")
+  })
+
+  const bottomInput = inputs.find(function(element) {
+    return element.classList.contains("amount_bottom")
+  })
+
+  const bottomSelect = inputs.find(function(element) {
+    return element.classList.contains("select_bottom")
+  })
+  // convertUnits(inputs);
+
+  specificInputs.push(topInput, bottomInput);
+  specificSelects.push(topSelect, bottomSelect);
+
+  createInputsEventListeners(specificInputs);
+  createSelectEventListeners(specificSelects);
 
 // neeed to make an on change event listener;
 
-  // const topInput = inputs.find(function(element) {
-  //   return element.classList.contains("amount_top")
-  // })
-  // console.log(topInput);
   // return inputs;
   // inputs.forEach(input => {
   //   addEventListener('keydown', function() {
@@ -98,39 +140,39 @@ async function createInputs(e) {
   const htmlTop = `
   <div class='inputs-select slide-down' style="width: 40%; margin-top: -25px">
           <div class="select" style="display: grid; width: 120px;">
-            <label for="distance-unit-selection">Select Units</label>
-            <select class="distance-select" id="distance-select" style="width: 120px; height: 35px">
-            ${optionsTopHTML}
+            <label for="distance-unit-selection">Unit Type</label>
+            <select class="distance-select select_top" id="distance-select" style="width: 130px; height: 35px">
+            <option selected="selected">Select a unit</option>
+            ${optionsTopHTML.join('')}
             </select>
           </div>
 
           <div class="distance-input" style="display: grid; margin-left: 10%; width: 120px;">
             <label for="distance-input">Input Units</label>
-            <input name="amount_top" class="amount_top" type="number" style="width: 120px; height: 35px;" placeholder="" id="">
+            <input class="amount_top" type="number" style="width: 130px; height: 35px;" placeholder="" id="">
           </div>
   </div>
   `;
 
-  // const selectClass = document.querySelector('.distance-select');
-
   const htmlBottom = `
   <div class='inputs-select slide-up' style="width: 40%; margin-bottom: -20px">
           <div class="select" style="display: grid; width: 120px;">
-            <label for="distance-unit-selection">Select Units</label>
-            <select class="" id="distance-select" style="width: 120px; height: 35px;">
-                ${optionsBottomHTML}
+            <label for="distance-unit-selection">Unit Type</label>
+            <select class="select_bottom" id="distance-select" style="width: 130px; height: 35px;">
+            <option selected="selected">Select a unit</option>
+                ${optionsBottomHTML.join('')}
             </select>
           </div>
 
           <div class="distance-input" style="display: grid; margin-left: 10%; width: 120px;">
             <label for="distance-input">Input Units</label>
-            <input class="" type="number" style="width: 120px; height: 35px;" placeholder="" id="">
+            <input class="amount_bottom" type="number" style="width: 130px; height: 35px;" placeholder="" id="">
           </div>
         </div>
       `
   para1.insertAdjacentHTML('afterend', htmlTop);
   para2.insertAdjacentHTML('beforebegin', htmlBottom);
-  createInputsArray();
+  findInputs();
 }
 
 function removeInputs() {
