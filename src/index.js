@@ -7,7 +7,11 @@ const metricDistanceUnits = [
   'Millimeter', 'Centimeter', 'Meter', 'Kilometer'
 ];
 
-const metricToImperial = {
+const imperialDistanceUnits = [
+  'Inch', 'Foot', 'Yard', 'Mile'
+];
+
+const metricToImperialDistance = {
  'Millimeter': {
     'Inch': 0.0393701,
     'Foot': 0.003280841666667,
@@ -34,37 +38,96 @@ const metricToImperial = {
   },
 };
 
-const imperialToMetric = {
-  'Inch': {
-    'Millimeter': 25.400013716002582953,
-    'Centimeter': 2.5400013716002582953,
-    'Meter': 0.025400013716002582675,
-    'Kilometer': 0.0000025400013716002,
+const metricLiquidUnits = [
+  'Milliliter', 'Liter'
+]
+
+const imperialLiquidUnits = [
+  'Teaspoon', 'Tablespoon', 'Fluid Ounce', 'Cup', 'Pint', 'Quart', 'Gallon'
+]
+
+const metricToImperialLiquid = {
+  'Milliliter': {
+    'Teaspoon': 0.202884,
+    'Tablespoon': 0.067628,
+    'Fluid Ounce': 0.033814,
+    'Cup': 0.00416667,
+    'Pint': 0.00211338,
+    "Quart": 0.00105669,
+    "Gallon": 0.000264172
   },
-  'Foot': {
-    'Millimeter': 304.80016459203102386,
-    'Centimeter': 30.480016459203103096,
-    'Meter': 0.30480016459203101986,
-    'Kilometer': 0.00030480016459203101292,
-  },
-  'Yard': {
-    'Millimeter': 914.40049377609295789,
-    'Centimeter': 91.440049377609298631,
-    'Meter': 0.91440049377609300407,
-    'Kilometer': 0.00091440049377609303877,
-  },
-  'Mile': {
-    'Millimeter': 1609344.8690459236968,
-    'Centimeter': 160934.48690459236968,
-    'Meter': 1609.3448690459238151,
-    'Kilometer': 1.609344869045923776,
+  'Liter': {
+    'Teaspoon': 202.884,
+    'Tablespoon': 67.628,
+    'Fluid Ounce': 33.814,
+    'Cup': 4.16667,
+    'Pint': 2.11338,
+    "Quart": 1.05669,
+    "Gallon": 0.264172
   }
 }
 
+const metricTemperatureUnits = [
+  'Celcius'
+]
 
-const imperialDistanceUnits = [
-  'Inch', 'Foot', 'Yard', 'Mile'
-];
+const imperialTemperatureUnits = [
+  'Fahrenheit'
+]
+
+const metricToImperialTemperature = {
+  'Celcius': {
+    Fahrenheit: function(num) {
+      return num * (9/5) + 32
+    }
+  },
+}
+
+const metricWeightUnits = [
+
+]
+
+const imperialWeightUnits = [
+
+]
+
+const metricToImperialWeight= {
+
+}
+
+const metricToImperialCurrency = {
+
+}
+
+// const imperialToMetric = {
+//   'Inch': {
+//     'Millimeter': 25.400013716002582953,
+//     'Centimeter': 2.5400013716002582953,
+//     'Meter': 0.025400013716002582675,
+//     'Kilometer': 0.0000025400013716002,
+//   },
+//   'Foot': {
+//     'Millimeter': 304.80016459203102386,
+//     'Centimeter': 30.480016459203103096,
+//     'Meter': 0.30480016459203101986,
+//     'Kilometer': 0.00030480016459203101292,
+//   },
+//   'Yard': {
+//     'Millimeter': 914.40049377609295789,
+//     'Centimeter': 91.440049377609298631,
+//     'Meter': 0.91440049377609300407,
+//     'Kilometer': 0.00091440049377609303877,
+//   },
+//   'Mile': {
+//     'Millimeter': 1609344.8690459236968,
+//     'Centimeter': 160934.48690459236968,
+//     'Meter': 1609.3448690459238151,
+//     'Kilometer': 1.609344869045923776,
+//   }
+// }
+
+
+
 
 const placeholderArray = ['Unit', 'Unit', 'Unit', 'Unit'];
 
@@ -117,8 +180,18 @@ function createSelectEventListeners(selects) {
 }
 
 function convertUnits(topValue, bottomValue, topInput, bottomInput) {
+  const unitConverterArray = checkPanelNumber(topInput.parentNode.parentNode.parentNode)[2];
+
+    if (selectTopValue === 'Celcius') {
+      bottomInput.value = unitConverterArray.Celcius.Fahrenheit(topValue).toFixed(5);
+      return;
+    }
+  // console.log(selectTopValue);
+  // console.log(selectBottomValue);
+  // console.log(unitConverterArray);
+
     if (topValue) {
-      const rate = metricToImperial[`${selectTopValue}`][`${selectBottomValue}`];
+      const rate = unitConverterArray[`${selectTopValue}`][`${selectBottomValue}`];
       const convertedAmount = topValue * rate;
       bottomInput.value = convertedAmount.toFixed(5);
     }
@@ -199,11 +272,11 @@ function checkPanelNumber(panel) {
   })
 
   switch (thisPanel.innerText) {
-    case 'DISTANCE': return [metricDistanceUnits, imperialDistanceUnits];
+    case 'DISTANCE': return [metricDistanceUnits, imperialDistanceUnits, metricToImperialDistance];
       break;
-    case 'LIQUID': return [placeholderArray, placeholderArray];
+    case 'LIQUID': return [metricLiquidUnits, imperialLiquidUnits, metricToImperialLiquid];
       break;
-    case 'TEMPERATURE': return [placeholderArray, placeholderArray];
+    case 'TEMPERATURE': return [metricTemperatureUnits, imperialTemperatureUnits, metricToImperialTemperature];
       break;
     case 'WEIGHT': return [placeholderArray, placeholderArray];
       break;
