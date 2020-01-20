@@ -84,16 +84,36 @@ const metricToImperialTemperature = {
 }
 
 const metricWeightUnits = [
-
+  'Milligram', 'Gram', 'Kilogram', 'Metric Ton'
 ]
 
 const imperialWeightUnits = [
-
+  'Ounce', 'Pound', 'Ton'
 ]
 
 const metricToImperialWeight= {
-
+  'Milligram': {
+    'Ounce': 0.0000035274,
+    'Pound': 0.00000022046,
+    'Ton': 0.00000000011023,
+  },
+  'Gram': {
+    'Ounce': 0.035274,
+    'Pound': 0.00220462,
+    'Ton': 0.00000011023
+  },
+  'Kilogram': {
+    'Ounce': 35.274,
+    'Pound': 2.20462,
+    'Ton': 0.00110231
+  },
+  'Metric Ton': {
+    'Ounce': 35274,
+    'Pound': 2204.62199992473,
+    'Ton': 1.10231
+  }
 }
+
 
 const metricToImperialCurrency = {
 
@@ -183,7 +203,7 @@ function convertUnits(topValue, bottomValue, topInput, bottomInput) {
   const unitConverterArray = checkPanelNumber(topInput.parentNode.parentNode.parentNode)[2];
 
     if (selectTopValue === 'Celcius' && selectBottomValue === 'Fahrenheit') {
-      bottomInput.value = unitConverterArray.Celcius.Fahrenheit(topValue).toFixed(5);
+      bottomInput.value = unitConverterArray.Celcius.Fahrenheit(topValue).toFixed(2);
       return;
     }
   // console.log(selectTopValue);
@@ -193,7 +213,7 @@ function convertUnits(topValue, bottomValue, topInput, bottomInput) {
     if (topValue) {
       const rate = unitConverterArray[`${selectTopValue}`][`${selectBottomValue}`];
       const convertedAmount = topValue * rate;
-      bottomInput.value = convertedAmount.toFixed(5);
+      bottomInput.value = convertedAmount.toFixed(4);
     }
 
     // if (bottomValue) {
@@ -278,7 +298,7 @@ function checkPanelNumber(panel) {
       break;
     case 'TEMPERATURE': return [metricTemperatureUnits, imperialTemperatureUnits, metricToImperialTemperature];
       break;
-    case 'WEIGHT': return [placeholderArray, placeholderArray];
+    case 'WEIGHT': return [metricWeightUnits, imperialWeightUnits, metricToImperialWeight];
       break;
     case 'CURRENECY': return [placeholderArray, placeholderArray];
       break;
