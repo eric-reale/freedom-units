@@ -7,6 +7,61 @@ const metricDistanceUnits = [
   'Millimeter', 'Centimeter', 'Meter', 'Kilometer'
 ];
 
+const metricToImperial = {
+ 'Millimeter': {
+    'Inch': 0.0393701,
+    'Foot': 0.003280841666667,
+    'Yard': 0.0010936138888889999563,
+    "Mile": 0.0000000621371527777,
+  },
+  'Centimeter': {
+    'Inch': 0.393701,
+    'Foot': 0.03280841666667,
+    'Yard': 0.010936138888889999563,
+    "Mile": 0.000000621371527777,
+  },
+  'Meter': {
+    'Inch': 39.370100000004001117,
+    'Foot': 3.280841666666999501,
+    'Yard': 1.0936138888889999077,
+    "Mile": 0.00062137152777784086452,
+  },
+  'Kilometer': {
+    'Inch': 39370.100000004000321,
+    'Foot': 3280.841666666999572,
+    'Yard': 1093.6138888890000089,
+    "Mile": 0.62137152777784099289,
+  },
+};
+
+const imperialToMetric = {
+  'Inch': {
+    'Millimeter': 25.400013716002582953,
+    'Centimeter': 2.5400013716002582953,
+    'Meter': 0.025400013716002582675,
+    'Kilometer': 0.0000025400013716002,
+  },
+  'Foot': {
+    'Millimeter': 304.80016459203102386,
+    'Centimeter': 30.480016459203103096,
+    'Meter': 0.30480016459203101986,
+    'Kilometer': 0.00030480016459203101292,
+  },
+  'Yard': {
+    'Millimeter': 914.40049377609295789,
+    'Centimeter': 91.440049377609298631,
+    'Meter': 0.91440049377609300407,
+    'Kilometer': 0.00091440049377609303877,
+  },
+  'Mile': {
+    'Millimeter': 1609344.8690459236968,
+    'Centimeter': 160934.48690459236968,
+    'Meter': 1609.3448690459238151,
+    'Kilometer': 1.609344869045923776,
+  }
+}
+
+
 const imperialDistanceUnits = [
   'Inch', 'Foot', 'Yard', 'Mile'
 ];
@@ -27,42 +82,66 @@ function unitTypeMargin(e) {
 
 let selectTopValue;
 let selectBottomValue;
+let topSelect;
+let bottomSelect;
 
-function handleSelectValues(e) {
+function handleSelectValues(e, topSelect, bottomSelect) {
   if (e.target.classList.contains('select_top')) {
   let selectedTopIndex = e.target.options.selectedIndex;
   selectTopValue = (e.target.options[selectedTopIndex].value)
+  topSelect = topSelect;
   }
 
   if (e.target.classList.contains('select_bottom')) {
   let selectedBottomIndex = e.target.options.selectedIndex;
   selectBottomValue = (e.target.options[selectedBottomIndex].value)
+  bottomSelect = bottomSelect;
   }
  }
 
 function createSelectEventListeners(selects) {
-  let topSelect = selects[0];
-  let bottomSelect = selects[1];
+  topSelect = selects[0];
+  bottomSelect = selects[1];
 
   topSelect.addEventListener('change', function(e) {
     if (e.target.classList.contains('amount_top')) return;
     if (e.target.classList.contains('amount_bottom')) return;
-    handleSelectValues(e);
+    handleSelectValues(e, topSelect, bottomSelect);
   })
 
   bottomSelect.addEventListener('change', function(e) {
     if (e.target.classList.contains('amount_top')) return;
     if (e.target.classList.contains('amount_bottom')) return;
-    handleSelectValues(e);
+    handleSelectValues(e, topSelect, bottomSelect);
   })
 }
 
+function convertUnits(topValue, bottomValue, topInput, bottomInput) {
+    if (topValue) {
+      const rate = metricToImperial[`${selectTopValue}`][`${selectBottomValue}`];
+      const convertedAmount = topValue * rate;
+      bottomInput.value = convertedAmount.toFixed(5);
+    }
 
-function convertUnits(topValue, bottomValue) {
-    console.log(selectTopValue);
-    console.log(selectBottomValue);
-    console.log(topValue);
-    console.log(bottomValue);
+    // if (bottomValue) {
+    //   const rate = imperialToMetric[`${selectBottomValue}`][`${selectTopValue}`];
+    //   const convertedAmount = topValue * rate;
+    //   topInput.value = convertedAmount.toFixed(5);
+    // }
+
+  topSelect.addEventListener('change', function(e) {
+    if (e.target.classList.contains('amount_top')) return;
+    if (e.target.classList.contains('amount_bottom')) return;
+    handleSelectValues(e, topSelect, bottomSelect);
+    convertUnits(topValue, bottomValue, topInput, bottomInput);
+  })
+
+  bottomSelect.addEventListener('change', function(e) {
+    if (e.target.classList.contains('amount_top')) return;
+    if (e.target.classList.contains('amount_bottom')) return;
+    handleSelectValues(e, topSelect, bottomSelect);
+    convertUnits(topValue, bottomValue, topInput, bottomInput);
+  })
 }
 
 function createInputsEventListeners(inputs) {
@@ -73,12 +152,12 @@ function createInputsEventListeners(inputs) {
 
   topInput.addEventListener('keyup', function() {
     inputTopValue = topInput.value;
-    convertUnits(inputTopValue, inputBottomValue)
+    convertUnits(inputTopValue, inputBottomValue, topInput, bottomInput)
   })
 
   bottomInput.addEventListener('keyup', function() {
     inputBottomValue = bottomInput.value;
-    convertUnits(inputTopValue, inputBottomValue)
+    convertUnits(inputTopValue, inputBottomValue, topInput, bottomInput)
   })
 }
 
@@ -107,8 +186,6 @@ function findInputs() {
 
   specificInputs.push(topInput, bottomInput);
   specificSelects.push(topSelect, bottomSelect);
-
-  // console.log(specificSelects, specificInputs);
 
   createSelectEventListeners(specificSelects);
   createInputsEventListeners(specificInputs);
@@ -152,10 +229,10 @@ async function createInputs(e) {
   const para2 = (e.currentTarget.lastElementChild);
   await wait(500);
   const htmlTop = `
-  <div class='inputs-select slide-down' style="width: 40%; margin-top: -25px">
+  <div class='inputs-select slide-down' style="width: 40%; margin-top: -22px;">
           <div class="select" style="display: grid; width: 120px;">
             <label for="distance-unit-selection">Unit Type</label>
-            <select class="distance-select select_top" id="distance-select" style="width: 130px; height: 35px">
+            <select class="distance-select select_top" id="distance-select" style="width: 130px; height: 35px;">
             <option selected="selected">Select a unit</option>
             ${optionsTopHTML.join('')}
             </select>
@@ -169,7 +246,7 @@ async function createInputs(e) {
   `;
 
   const htmlBottom = `
-  <div class='inputs-select slide-up' style="width: 40%; margin-bottom: -20px">
+  <div class='inputs-select slide-up' style="width: 40%; margin-bottom: -15px">
           <div class="select" style="display: grid; width: 120px;">
             <label for="distance-unit-selection">Unit Type</label>
             <select class="select_bottom" id="distance-select" style="width: 130px; height: 35px;">
@@ -179,7 +256,7 @@ async function createInputs(e) {
           </div>
 
           <div class="distance-input" style="display: grid; margin-left: 10%; width: 120px;">
-            <label for="distance-input">Input Units</label>
+            <label for="distance-input">Converted Units</label>
             <input class="amount_bottom" type="number" style="width: 130px; height: 35px;" placeholder="" id="">
           </div>
         </div>

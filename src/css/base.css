@@ -170,7 +170,7 @@ input[type="radio"] {
   margin: 0;
   width: 100%;
   transition: transform 0.5s;
-  flex: 1 0 auto;
+  flex: 3 0 auto;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -184,7 +184,7 @@ input[type="radio"] {
   text-transform: uppercase;
   font-family: 'Seymour One';
   text-shadow: 0 0 4px rgba(0, 0, 0, 0.72), 0 0 14px rgba(0, 0, 0, 0.45);
-  font-size: 3em;
+  font-size: 2.5em;
 }
 
 .panel p:nth-child(2) {
@@ -193,7 +193,7 @@ input[type="radio"] {
 
 .panel.open {
   font-size: 7px;
-  flex: 2.5;
+  flex: 4;
 }
 
 .inputs-select {
@@ -251,3 +251,12 @@ label {
 .freedom {
   color: blue;
 }
+
+.amount_bottom {
+  background-color: red;
+}
+
+/*body > div > div.panel.open.open-active > div.inputs-select.slide-up > div.distance-input > input {
+  background: blue;
+  color: white;
+}*/
