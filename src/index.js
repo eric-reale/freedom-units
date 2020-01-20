@@ -182,7 +182,7 @@ function createSelectEventListeners(selects) {
 function convertUnits(topValue, bottomValue, topInput, bottomInput) {
   const unitConverterArray = checkPanelNumber(topInput.parentNode.parentNode.parentNode)[2];
 
-    if (selectTopValue === 'Celcius') {
+    if (selectTopValue === 'Celcius' && selectBottomValue === 'Fahrenheit') {
       bottomInput.value = unitConverterArray.Celcius.Fahrenheit(topValue).toFixed(5);
       return;
     }
