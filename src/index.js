@@ -14,6 +14,8 @@ const imperialDistanceUnits = [
   'Inch', 'Foot', 'Yard', 'Mile'
 ];
 
+const convertToUSD = [];
+
 const metricToImperialDistance = {
  'Millimeter': {
     'Inch': 0.0393701,
@@ -233,7 +235,7 @@ function convertUnits(topValue, bottomValue, topInput, bottomInput) {
     if (topValue !== 'Celcius' || 'USD: United States Dollar') {
       const rate = unitConverterArray[`${selectTopValue}`][`${selectBottomValue}`];
       const convertedAmount = topValue * rate;
-      bottomInput.value = convertedAmount.toFixed(4);
+      bottomInput.value = convertedAmount.toFixed(3);
       addBlueClass(bottomInput);
     }
 
