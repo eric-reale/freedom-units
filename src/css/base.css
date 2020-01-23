@@ -260,3 +260,8 @@ label {
   background: blue;
   color: white;
 }*/
+
+.add-blue > input {
+   background: #6495ED;
+  color: white;
+}

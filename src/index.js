@@ -3,6 +3,9 @@
 // import metricDistanceUnits from './units.js';
 // import currencies from './units.js';  //// Not working
 
+const endpoint = 'https://api.exchangeratesapi.io/latest';
+const ratesByBase = {};
+
 const metricDistanceUnits = [
   'Millimeter', 'Centimeter', 'Meter', 'Kilometer'
 ];
@@ -114,42 +117,45 @@ const metricToImperialWeight= {
   }
 }
 
+const foreignCurrencies = [
+  'AUD: Australian Dollar',
+  'BGN: Bulgarian Lev',
+  'BRL: Brazilian Real',
+  'CAD: Canadian Dollar',
+  'CHF: Swiss Franc',
+  'CNY: Chinese Yuan',
+  'CZK: Czech Republic Koruna',
+  'DKK: Danish Krone',
+  'EUR: Euro',
+  'GBP: British Pound Sterling',
+  'HKD: Hong Kong Dollar',
+  'HRK: Croatian Kuna',
+  'HUF: Hungarian Forint',
+  'IDR: Indonesian Rupiah',
+  'ILS: Israeli New Sheqel',
+  'INR: Indian Rupee',
+  'JPY: Japanese Yen',
+  'KRW: South Korean Won',
+  'MXN: Mexican Peso',
+  'MYR: Malaysian Ringgit',
+  'NOK: Norwegian Krone',
+  'NZD: New Zealand Dollar',
+  'PHP: Philippine Peso',
+  'PLN: Polish Zloty',
+  'RON: Romanian Leu',
+  'RUB: Russian Ruble',
+  'SEK: Swedish Krona',
+  'SGD: Singapore Dollar',
+  'THB: Thai Baht',
+  'TRY: Turkish Lira',
+  'ZAR: South African Rand',
+];
 
-const metricToImperialCurrency = {
+const USAcurrency = [
+'USD: United States Dollar',
+]
 
-}
-
-// const imperialToMetric = {
-//   'Inch': {
-//     'Millimeter': 25.400013716002582953,
-//     'Centimeter': 2.5400013716002582953,
-//     'Meter': 0.025400013716002582675,
-//     'Kilometer': 0.0000025400013716002,
-//   },
-//   'Foot': {
-//     'Millimeter': 304.80016459203102386,
-//     'Centimeter': 30.480016459203103096,
-//     'Meter': 0.30480016459203101986,
-//     'Kilometer': 0.00030480016459203101292,
-//   },
-//   'Yard': {
-//     'Millimeter': 914.40049377609295789,
-//     'Centimeter': 91.440049377609298631,
-//     'Meter': 0.91440049377609300407,
-//     'Kilometer': 0.00091440049377609303877,
-//   },
-//   'Mile': {
-//     'Millimeter': 1609344.8690459236968,
-//     'Centimeter': 160934.48690459236968,
-//     'Meter': 1609.3448690459238151,
-//     'Kilometer': 1.609344869045923776,
-//   }
-// }
-
-
-
-
-const placeholderArray = ['Unit', 'Unit', 'Unit', 'Unit'];
+// const placeholderArray = ['Unit', 'Unit', 'Unit', 'Unit'];
 
 const panels = document.querySelectorAll('.panel');
 
@@ -199,28 +205,37 @@ function createSelectEventListeners(selects) {
   })
 }
 
+function addBlueClass(bottomInput) {
+  const bottom = bottomInput.parentNode;
+  if (bottomInput.value) {
+    bottom.classList.add('add-blue');
+  }
+}
+
 function convertUnits(topValue, bottomValue, topInput, bottomInput) {
   const unitConverterArray = checkPanelNumber(topInput.parentNode.parentNode.parentNode)[2];
 
     if (selectTopValue === 'Celcius' && selectBottomValue === 'Fahrenheit') {
       bottomInput.value = unitConverterArray.Celcius.Fahrenheit(topValue).toFixed(2);
+      addBlueClass(bottomInput);
       return;
     }
-  // console.log(selectTopValue);
-  // console.log(selectBottomValue);
-  // console.log(unitConverterArray);
 
-    if (topValue) {
+    if (selectBottomValue === 'USD: United States Dollar') {
+      topValueCurrency = selectTopValue.substring(0,3);
+      defaultCurrency = selectBottomValue.substring(0,3);
+      const currentCurrencyRate = rates.rates[`${topValueCurrency}`];
+      bottomInput.value = (topValue / currentCurrencyRate).toFixed(2);
+      addBlueClass(bottomInput);
+      return;
+    }
+
+    if (topValue !== 'Celcius' || 'USD: United States Dollar') {
       const rate = unitConverterArray[`${selectTopValue}`][`${selectBottomValue}`];
       const convertedAmount = topValue * rate;
       bottomInput.value = convertedAmount.toFixed(4);
+      addBlueClass(bottomInput);
     }
-
-    // if (bottomValue) {
-    //   const rate = imperialToMetric[`${selectBottomValue}`][`${selectTopValue}`];
-    //   const convertedAmount = topValue * rate;
-    //   topInput.value = convertedAmount.toFixed(5);
-    // }
 
   topSelect.addEventListener('change', function(e) {
     if (e.target.classList.contains('amount_top')) return;
@@ -300,7 +315,7 @@ function checkPanelNumber(panel) {
       break;
     case 'WEIGHT': return [metricWeightUnits, imperialWeightUnits, metricToImperialWeight];
       break;
-    case 'CURRENECY': return [placeholderArray, placeholderArray];
+    case 'CURRENECY': return [foreignCurrencies, USAcurrency, convertToUSD];
       break;
     default: null;
   }
@@ -360,6 +375,7 @@ async function createInputs(e) {
   findInputs();
 }
 
+
 function removeInputs() {
   const inputSelects = Array.from(document.querySelectorAll('.inputs-select'));
     function removeFadeOut( el, speed ) {
@@ -402,6 +418,15 @@ function toggleActive(e) {
   if (e.propertyName.includes('flex'))
   this.classList.toggle('open-active');
 }
+
+async function fetchRates(base = 'USD') {
+  const res = await fetch(`${endpoint}?base=${base}`);
+  rates = await res.json();
+  return rates;
+}
+
+let rates = {};
+window.document.onload = fetchRates()
 
 // Panel event listeners
 panels.forEach(panel => {
